@@ -2,12 +2,19 @@ plugins {
     java
     `java-library`
     `maven-publish`
-    id("io.freefair.lombok")
+    // Keep the version in sync with the one declared in the root project of the mod project.
+    // It must be declared here as well because the root project's `plugins` block is not visible
+    //  when this project is built as a standalone project (e.g. by JitPack).
+    id("io.freefair.lombok") version "9.8.2"
 }
 
-// These are necessary for standalone build, but will be overridden when in mod project
-group = "snw.mods.rfm"
-version = "0.1.0"
+// These are necessary for standalone build, but will be overridden when in mod project.
+// JitPack passes the requested coordinates through -Pgroup / -Pversion, so read them from there
+//  to make sure the artifacts are published under the coordinates JitPack expects.
+if (path == ":") {
+    group = providers.gradleProperty("group").getOrElse("snw.mods.rfm")
+    version = providers.gradleProperty("version").getOrElse("0.1.0")
+}
 
 tasks.withType<Test> {
     useJUnitPlatform()
