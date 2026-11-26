@@ -1,0 +1,2 @@
+jdk:
+  - openjdk21 # We will change this if mod is required to have Java toolchain updated, or downgraded when backporting
